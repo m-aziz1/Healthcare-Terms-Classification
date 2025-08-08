@@ -1,0 +1,21 @@
+# Ignore Python build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore PyInstaller build
+build/
+*.spec
+dist
+
+
+# Ignore virtual environments
+venv/
+model.py
+predict.py
+
+final-training-data.csv
+gui_health_classifier.spec
+predicted.csv
+unclassified-terms.csv
