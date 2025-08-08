@@ -25,15 +25,15 @@ class HealthClassifierGUI:
         return text
     
     def setup_gui(self):
-        # Main frame
+        #Main frame
         main_frame = ttk.Frame(self.root, padding="10")
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
-        # Title
+        #Title
         title_label = ttk.Label(main_frame, text="Health Terms Classifier", font=("Arial", 16, "bold"))
         title_label.grid(row=0, column=0, columnspan=2, pady=(0, 20))
         
-        # Training section
+        #Training section
         training_frame = ttk.LabelFrame(main_frame, text="Model Training", padding="10")
         training_frame.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
         
@@ -44,7 +44,7 @@ class HealthClassifierGUI:
         
         ttk.Button(training_frame, text="Train Model", command=self.start_training).grid(row=1, column=0, pady=(10, 0))
         
-        # Prediction section
+        #Prediction section
         prediction_frame = ttk.LabelFrame(main_frame, text="Make Predictions", padding="10")
         prediction_frame.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
         
@@ -55,11 +55,11 @@ class HealthClassifierGUI:
         
         ttk.Button(prediction_frame, text="Make Predictions", command=self.start_prediction).grid(row=1, column=0, pady=(10, 0))
         
-        # Results section
+        #Results section
         results_frame = ttk.LabelFrame(main_frame, text="Results", padding="10")
         results_frame.grid(row=3, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10))
         
-        # Text widget with scrollbar
+        #Text widget with scrollbar
         text_frame = ttk.Frame(results_frame)
         text_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
@@ -70,7 +70,7 @@ class HealthClassifierGUI:
         self.results_text.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         scrollbar.grid(row=0, column=1, sticky=(tk.N, tk.S))
         
-        # Configure grid weights
+        #Configure grid weights
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
         main_frame.columnconfigure(0, weight=1)
@@ -106,7 +106,7 @@ class HealthClassifierGUI:
             messagebox.showerror("Error", "Please select a training data file.")
             return
         
-        # Run training in separate thread to prevent GUI freezing
+        #Run training in separate thread to prevent GUI freezing
         threading.Thread(target=self.train_model, daemon=True).start()
     
     def train_model(self):
@@ -116,7 +116,7 @@ class HealthClassifierGUI:
             self.log_message("TRAINING MODEL")
             self.log_message("=" * 50)
             
-            # Load training data
+            #Load training data
             self.log_message("Loading training data...")
             df = pd.read_csv(self.training_file_var.get(), encoding='latin1')
             
@@ -134,12 +134,12 @@ class HealthClassifierGUI:
             X = df['text_feature']
             y = df['Suggested TOPIC_DESC']
             
-            # Split for evaluation
+            #Split for evaluation
             X_train, X_test, y_train, y_test = train_test_split(
                 X, y, test_size=0.2, random_state=42, stratify=y
             )
             
-            # Train and evaluate
+            #Train and evaluate
             self.log_message("Training and evaluating model...")
             eval_pipeline = Pipeline([
                 ('tfidf', TfidfVectorizer(stop_words='english', ngram_range=(1, 2))),
@@ -154,7 +154,7 @@ class HealthClassifierGUI:
             self.log_message("\nClassification Report:")
             self.log_message(classification_report(y_test, y_pred, zero_division=0))
             
-            # Train final model on all data
+            #Train final model on all data
             self.log_message("Training final model on complete dataset...")
             self.trained_model = Pipeline([
                 ('tfidf', TfidfVectorizer(stop_words='english', ngram_range=(1, 2))),
@@ -177,7 +177,7 @@ class HealthClassifierGUI:
             messagebox.showerror("Error", "Please select a file to predict.")
             return
         
-        # Ask for output file
+        #Ask for output file
         output_file = filedialog.asksaveasfilename(
             title="Save Predictions As",
             defaultextension=".csv",
@@ -187,7 +187,7 @@ class HealthClassifierGUI:
         if not output_file:
             return
         
-        # Run prediction in separate thread
+        #Run prediction in separate thread
         threading.Thread(target=self.make_predictions, args=(output_file,), daemon=True).start()
     
     def make_predictions(self, output_file):
@@ -196,32 +196,32 @@ class HealthClassifierGUI:
             self.log_message("MAKING PREDICTIONS")
             self.log_message("=" * 50)
             
-            # Load data to predict
+            #Load data to predict
             self.log_message("Loading data to predict...")
             df = pd.read_csv(self.predict_file_var.get(), encoding='latin1')
             
-            # Check required columns
+            #Check required columns
             required_cols = ['Term Names', 'Definitions']
             missing_cols = [col for col in required_cols if col not in df.columns]
             if missing_cols:
                 raise Exception(f"Missing required columns: {missing_cols}")
             
-            # Prepare data
+            #Prepare data
             df['Term Names'].fillna('', inplace=True)
             df['Definitions'].fillna('', inplace=True)
             df['text_feature'] = df['Term Names'] + ' ' + df['Definitions']
             df['text_feature'] = df['text_feature'].apply(self.clean_text)
             
-            # Make predictions
+            #Make predictions
             self.log_message(f"Making predictions for {len(df)} terms...")
             predictions = self.trained_model.predict(df['text_feature'])
             df['Suggested TOPIC_DESC'] = predictions
             
-            # Save results
+            #Save results
             df.to_csv(output_file, index=False)
             self.log_message(f"Predictions saved to: {output_file}")
             
-            # Show sample predictions
+            #Show sample predictions
             self.log_message("\nSample predictions:")
             for i, row in df.head(5).iterrows():
                 self.log_message(f"Term: '{row['Term Names']}'")
