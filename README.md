@@ -1,1 +1,31 @@
-# Health-Terms-Classification
+# Health Terms Classification
+
+This project classifies medical and health-related terms into one of **39 predefined categories** for a health directory, such as *Diabetes*, *Mental Health and Wellness*, and *Asthma*.  
+The model uses both the **Term Name** and **Definition** to predict the correct category.
+
+## How It Works
+- **Data Processing:**  
+  - Combined Term Name + Definition into a single text feature  
+  - Lowercased text and removed punctuation/non-alphanumeric characters
+- **Model:**  
+  - **TF-IDF Vectorizer** to convert text into numerical features  
+  - **LinearSVC** classifier with `class_weight="balanced"` to handle class imbalance
+- **Libraries:**  
+  - `pandas` for data handling  
+  - `scikit-learn` for ML pipeline, vectorization, and classification  
+  - `tkinter` for GUI interface
+
+## Training & Evaluation
+- **Train/Test Split:** 80/20 with stratification
+- **Accuracy:** ~58.65%  
+- **Reason for Moderate Accuracy:**  
+  - Significant class imbalance (some categories have <10 samples)  
+  - Overlapping terminology between categories
+
+## Features
+- **GUI** built with Tkinter for selecting datasets, training, and making predictions
+- Outputs predictions to CSV with updated `Suggested TOPIC_DESC` column
+
+## Future Improvements
+- Collect more balanced training data
+- Experiment with ensemble methods or deep learning approaches
