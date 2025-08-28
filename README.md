@@ -1,7 +1,8 @@
 # Health Terms Classification
 
 This project classifies medical and health-related terms into one of **39 predefined categories** for a health directory, such as *Diabetes*, *Mental Health and Wellness*, and *Asthma*.  
-The model uses both the **Term Name** and **Definition** to predict the correct category.
+
+The model uses both the **Term Name** and **Definition** to predict the correct category. While the accuracy achieved is not exemplary as a consequence of insufficient training data, the model still produced great results classifying 10K+ health directory terms for a project at my internship. 
 
 ## How It Works
 - **Data Processing:**  
