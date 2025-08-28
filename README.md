@@ -22,6 +22,11 @@ The model uses both the **Term Name** and **Definition** to predict the correct 
   - Significant class imbalance (some categories have <10 samples)  
   - Overlapping terminology between categories
 
+## Demo
+<p align="center">
+  <img src="https://github.com/m-aziz1/Healthcare-Terms-Classification/blob/main/assets/health-terms-classifier.gif" alt="Health Term Classifer demo" />
+</p>
+
 ## Features
 - **GUI** built with Tkinter for selecting datasets, training, and making predictions
 - Outputs predictions to CSV with updated `Suggested TOPIC_DESC` column
